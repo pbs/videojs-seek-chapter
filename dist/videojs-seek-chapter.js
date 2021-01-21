@@ -19,7 +19,7 @@
 
   var defaults = {
     displayFullChapter: false,
-    chapterDisplayLength: 10 //px
+    chapterDisplayLength: 10 // px
 
   }; // Cross-compatibility for Video.js 5 and 6.
 
@@ -59,9 +59,9 @@
 
       _this.player.ready(function () {
         _this.player.addRemoteTextTrack({
-          kind: "chapters",
-          src: "src/chapters.vtt",
-          label: "Chapters",
+          kind: 'chapters',
+          src: 'src/chapters.vtt',
+          label: 'Chapters',
           default: false
         }, true);
 
@@ -71,18 +71,23 @@
       });
 
       _this.player.on('loadedmetadata', function () {
-        _this.controlBar = _this.player.getChild("controlBar");
-        _this.progressControl = _this.controlBar.getChild("progressControl");
-        _this.seeker = _this.progressControl.getChild("SeekBar");
-        _this.mouseDisplay = _this.seeker.getChild("MouseTimeDisplay");
-        _this.tooltip = _this.mouseDisplay.getChild("TimeTooltip");
+        _this.controlBar = _this.player.getChild('controlBar');
+        _this.progressControl = _this.controlBar.getChild('progressControl');
+        _this.seeker = _this.progressControl.getChild('SeekBar');
+        _this.mouseDisplay = _this.seeker.getChild('MouseTimeDisplay');
+
+        if (!_this.mouseDisplay) {
+          return;
+        }
+
+        _this.tooltip = _this.mouseDisplay.getChild('TimeTooltip');
         _this.duration = _this.player.duration();
         _this.cues;
         var tracks = player.textTracks();
         var chapterTrack;
 
         for (var i = 0; tracks.length > i; i++) {
-          if ('chapters' === tracks[i].kind) {
+          if (tracks[i].kind === 'chapters') {
             chapterTrack = tracks[i];
           }
         }
@@ -115,12 +120,12 @@
         var chapter = document.createElement('div');
         var startPosition = (vttCue.startTime + 1) / _this2.duration * 100;
         var endPosition = vttCue.endTime / _this2.duration * 100;
-        chapter.className = "chapter-bar";
-        chapter.setAttribute("start", vttCue.startTime);
-        chapter.setAttribute("end", vttCue.endTime);
-        chapter.setAttribute("text", vttCue.text);
-        chapter.style.left = startPosition + "%";
-        chapter.style.width = _this2.options.displayFullChapter ? endPosition - startPosition + "%" : _this2.options.chapterDisplayLength + "px";
+        chapter.className = 'chapter-bar';
+        chapter.setAttribute('start', vttCue.startTime);
+        chapter.setAttribute('end', vttCue.endTime);
+        chapter.setAttribute('text', vttCue.text);
+        chapter.style.left = startPosition + '%';
+        chapter.style.width = _this2.options.displayFullChapter ? endPosition - startPosition + '%' : _this2.options.chapterDisplayLength + 'px';
 
         _this2.chapters.push(chapter);
 
@@ -148,7 +153,7 @@
 
           var mutation = _ref;
 
-          if (mutation.type == 'childList') {
+          if (mutation.type === 'childList') {
             _this3.chapters.forEach(function (chapter) {
               var rect1 = chapter.getBoundingClientRect();
 
@@ -157,7 +162,7 @@
               var overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
 
               if (overlap && _this3.regTimmer.test(tooltipEl.innerText)) {
-                tooltipEl.innerText = tooltipEl.innerText + " " + chapter.getAttribute("text");
+                tooltipEl.innerText = tooltipEl.innerText + ' ' + chapter.getAttribute('text');
               }
             }); // this.cues.forEach(vttCue => {
             //   if (this.hmsToSecondsOnly(tooltipEl.innerText) > vttCue.startTime
@@ -176,9 +181,9 @@
     };
 
     _proto.hmsToSecondsOnly = function hmsToSecondsOnly(str) {
-      var p = str.split(':'),
-          s = 0,
-          m = 1;
+      var p = str.split(':');
+      var s = 0;
+      var m = 1;
 
       while (p.length > 0) {
         s += m * parseInt(p.pop(), 10);

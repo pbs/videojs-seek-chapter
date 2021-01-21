@@ -55,6 +55,11 @@ class SeekChapter extends Plugin {
       this.progressControl = this.controlBar.getChild('progressControl');
       this.seeker = this.progressControl.getChild('SeekBar');
       this.mouseDisplay = this.seeker.getChild('MouseTimeDisplay');
+
+      if (!this.mouseDisplay) {
+        return;
+      }
+
       this.tooltip = this.mouseDisplay.getChild('TimeTooltip');
       this.duration = this.player.duration();
       this.cues;
