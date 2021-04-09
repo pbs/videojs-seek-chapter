@@ -36,16 +36,11 @@ class SeekChapter extends Plugin {
     // the parent class will add player under this.player
     super(player);
     this.chapters = [];
+    this.cues = null;
     this.regTimmer = /^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/;
     this.options = videojs.mergeOptions(defaults, options);
 
     this.player.ready(() => {
-      this.player.addRemoteTextTrack({
-        kind: 'chapters',
-        src: 'src/chapters.vtt',
-        label: 'Chapters',
-        default: false
-      }, true);
       this.player.addClass('vjs-seek-chapter');
       this.chapterCues = [];
     });
@@ -62,7 +57,7 @@ class SeekChapter extends Plugin {
 
       this.tooltip = this.mouseDisplay.getChild('TimeTooltip');
       this.duration = this.player.duration();
-      this.cues;
+
       const tracks = player.textTracks();
       let chapterTrack;
 
@@ -71,20 +66,22 @@ class SeekChapter extends Plugin {
           chapterTrack = tracks[i];
         }
       }
-      this.chapterCues = chapterTrack.cues;
+      if (chapterTrack) {
+        this.chapterCues = chapterTrack.cues;
 
-      const cuesReady = new Promise((res, rej) => {
-        const interval = setInterval(() => {
-          if (!this.cues) {
-            this.cues = this.chapterCues.cues_;
-          } else {
-            clearInterval(interval);
-            res(true);
-          }
-        }, 250);
-      });
+        const cuesReady = new Promise((res, rej) => {
+          const interval = setInterval(() => {
+            if (!this.cues) {
+              this.cues = this.chapterCues.cues_;
+            } else {
+              clearInterval(interval);
+              res(true);
+            }
+          }, 250);
+        });
 
-      cuesReady.then(() => this.addChapterToProgressBar());
+        cuesReady.then(() => this.addChapterToProgressBar());
+      }
 
     });
   }

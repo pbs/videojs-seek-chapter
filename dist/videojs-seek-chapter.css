@@ -1,2 +1,2 @@
-/*! @name videojs-seek-chapter @version 0.1.0 @license MIT */
+/*! @name videojs-seek-chapter @version 0.2.0 @license MIT */
 .video-js.vjs-seek-chapter{display:block}.video-js.vjs-seek-chapter .vjs-progress-control .chapter-bar{position:absolute;height:100%;border-right:1px solid rgba(0,0,0,.3);border-left:1px solid rgba(0,0,0,.3);background:#e1e1e1}.video-js.vjs-seek-chapter .vjs-time-tooltip{white-space:nowrap}

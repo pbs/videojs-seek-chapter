@@ -21,8 +21,16 @@
   <script src="dist/videojs-seek-chapter.js"></script>
   <script>
     (function (window, videojs) {
-      var examplePlayer = window.examplePlayer = videojs('videojs-seek-chapter-player');
-      var seekChapter = window.seekChapter = examplePlayer.seekChapter();
+      let player = window.player = videojs('videojs-seek-chapter-player');
+      player.ready(function () {
+        player.addRemoteTextTrack({
+          kind: 'chapters',
+          src: 'src/chapters.vtt',
+          label: 'Chapters',
+          default: false
+        }, true);
+      });
+      window.seekChapter = player.seekChapter();
     }(window, window.videojs));
   </script>
 </body>

@@ -1,4 +1,4 @@
-/*! @name videojs-seek-chapter @version 0.1.0 @license MIT */
+/*! @name videojs-seek-chapter @version 0.2.0 @license MIT */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('video.js')) :
   typeof define === 'function' && define.amd ? define(['video.js'], factory) :
@@ -13,7 +13,7 @@
     subClass.__proto__ = superClass;
   }
 
-  var version = "0.1.0";
+  var version = "0.2.0";
 
   var Plugin = videojs.getPlugin('plugin'); // Default options for the plugin.
 
@@ -54,17 +54,11 @@
       // the parent class will add player under this.player
       _this = _Plugin.call(this, player) || this;
       _this.chapters = [];
+      _this.cues = null;
       _this.regTimmer = /^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/;
       _this.options = videojs.mergeOptions(defaults, options);
 
       _this.player.ready(function () {
-        _this.player.addRemoteTextTrack({
-          kind: 'chapters',
-          src: 'src/chapters.vtt',
-          label: 'Chapters',
-          default: false
-        }, true);
-
         _this.player.addClass('vjs-seek-chapter');
 
         _this.chapterCues = [];
@@ -82,7 +76,6 @@
 
         _this.tooltip = _this.mouseDisplay.getChild('TimeTooltip');
         _this.duration = _this.player.duration();
-        _this.cues;
         var tracks = player.textTracks();
         var chapterTrack;
 
@@ -92,20 +85,22 @@
           }
         }
 
-        _this.chapterCues = chapterTrack.cues;
-        var cuesReady = new Promise(function (res, rej) {
-          var interval = setInterval(function () {
-            if (!_this.cues) {
-              _this.cues = _this.chapterCues.cues_;
-            } else {
-              clearInterval(interval);
-              res(true);
-            }
-          }, 250);
-        });
-        cuesReady.then(function () {
-          return _this.addChapterToProgressBar();
-        });
+        if (chapterTrack) {
+          _this.chapterCues = chapterTrack.cues;
+          var cuesReady = new Promise(function (res, rej) {
+            var interval = setInterval(function () {
+              if (!_this.cues) {
+                _this.cues = _this.chapterCues.cues_;
+              } else {
+                clearInterval(interval);
+                res(true);
+              }
+            }, 250);
+          });
+          cuesReady.then(function () {
+            return _this.addChapterToProgressBar();
+          });
+        }
       });
 
       return _this;

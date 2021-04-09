@@ -1,6 +1,6 @@
 {
   "name": "videojs-seek-chapter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "this plugin will display the chapters on the progress bar",
   "main": "dist/videojs-seek-chapter.cjs.js",
   "module": "dist/videojs-seek-chapter.es.js",
